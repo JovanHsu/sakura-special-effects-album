@@ -1,0 +1,21 @@
+{
+  "name": "sakura-special-effects-album",
+  "version": "1.0.0",
+  "description": "樱花背景特效 3D 盒子相册",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "live-server ./ --port=8181 --host=localhost",
+    "dev":"http-server ./ -o -p 8181"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JovanHsu/sakura-special-effects-album.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JovanHsu/sakura-special-effects-album/issues"
+  },
+  "homepage": "https://github.com/JovanHsu/sakura-special-effects-album#readme"
+}
