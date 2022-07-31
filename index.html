@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-
-<html lang="">
+<html lang="zh-cn">
 <head>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="description" content="Change OR Die"/>
-    <link rel="stylesheet" href="css/index.css"/>
-    <title>樱花落</title>
+    <meta charset="UTF-8">
+    <title>月亮的相册</title>
+    <meta content="⭐⭐我不李姐️️" name="Author">
+    <link href="css/index.css" rel="stylesheet">
+    <style id="css"></style>
     <script src="js/sakura.js"></script>
 </head>
-
 <body>
-<div class="top"></div>
 <canvas id="sakura"></canvas>
-<div class="cake">
-    <img alt="" src="img/cake.png">
+<div id="background"></div>
+<!--<div class="show">-->
+<!--    <div class="mask"></div>-->
+<!--    <img src="img/1.png" alt="">-->
+<!--</div>-->
+<div id="main">
+    <!--125个方块-->
+    <ul class="list">
+    </ul>
 </div>
+
+<script src="js/mousewheel.js"></script>
+<script src="js/index.js"></script>
+<script src="js/event.js"></script>
+
 </body>
 <!-- sakura shader -->
 <script id="sakura_point_vsh" type="x-shader/x_vertex">
@@ -109,6 +118,7 @@ void main(void) {
     //-0.69315 = ln(0.5)
     distancefade = min(1.0, exp((uFade.x - pdist) * 0.69315 / uFade.y));
 }
+
 </script>
 <script id="sakura_point_fsh" type="x-shader/x_fragment">
 #ifdef GL_ES
@@ -153,7 +163,7 @@ void main(void) {
     vec2 coord = vec2(dot(normX, tp), dot(normY, tp));
 
     //angle = 15 degree
-    const float flwrsn = 0.28819045102521;
+    const float flwrsn = 0.258819045102521;
     const float flwrcs = 0.965925826289068;
     mat2 flwrm = mat2(flwrcs, -flwrsn, flwrsn, flwrcs);
     vec2 flwrp = vec2(abs(coord.x), coord.y) * flwrm;
@@ -167,11 +177,11 @@ void main(void) {
     }
 
     if(r > rstop) discard;
-	//花瓣颜色
-    vec3 col = mix(vec3(1.0, 0.9, 0.75), vec3(1.0, 0.9, 0.87), r);
+
+    vec3 col = mix(vec3(1.0, 0.8, 0.75), vec3(1.0, 0.9, 0.87), r);
     float grady = mix(0.0, 1.0, pow(coord.y * 0.5 + 0.5, 0.35));
-    col *= vec3(3.0, grady, grady);
-    col *= mix(0.9, 1.0, pow(abs(coord.x), 1.0));
+    col *= vec3(1.0, grady, grady);
+    col *= mix(0.8, 1.0, pow(abs(coord.x), 0.3));
     col = col * diffuse + specular;
 
     col = mix(fadeCol, col, distancefade);
@@ -179,8 +189,9 @@ void main(void) {
     float alpha = (rstop > 0.001)? (0.5 - r / (rstop * 2.0)) : 1.0;
     alpha = smoothstep(0.0, 1.0, alpha) * palpha;
 
-    gl_FragColor = vec4(col * 3.0, alpha);
+    gl_FragColor = vec4(col * 0.5, alpha);
 }
+
 </script>
 <!-- effects -->
 <script id="fx_common_vsh" type="x-shader/x_vertex">
@@ -195,6 +206,7 @@ void main(void) {
     texCoord = aPosition.xy * 0.5 + vec2(0.5, 0.5);
     screenCoord = aPosition.xy * vec2(uResolution.z, 1.0);
 }
+
 </script>
 <script id="bg_fsh" type="x-shader/x_fragment">
 #ifdef GL_ES
@@ -211,10 +223,11 @@ void main(void) {
     vec3 col;
     float c;
     vec2 tmpv = texCoord * vec2(0.8, 1.0) - vec2(0.95, 1.0);
-    c = exp(-pow(length(tmpv) * 1.2, 2.0));
-    col = mix(vec3(0.05, 0.0, 0.03), vec3(0.96,0.91, 1.0) * 1.5, c);
+    c = exp(-pow(length(tmpv) * 1.8, 2.0));
+    col = mix(vec3(0.02, 0.0, 0.03), vec3(0.96, 0.98, 1.0) * 1.5, c);
     gl_FragColor = vec4(col * 0.5, 1.0);
 }
+
 </script>
 <script id="fx_brightbuf_fsh" type="x-shader/x_fragment">
 #ifdef GL_ES
@@ -231,6 +244,7 @@ void main(void) {
     vec4 col = texture2D(uSrc, texCoord);
     gl_FragColor = vec4(col.rgb * 2.0 - vec3(0.5), 1.0);
 }
+
 </script>
 <script id="fx_dirblur_r4_fsh" type="x-shader/x_fragment">
 #ifdef GL_ES
@@ -250,8 +264,9 @@ void main(void) {
     col = col + texture2D(uSrc, texCoord - uBlurDir.xy * uDelta);
     col = col + texture2D(uSrc, texCoord + (uBlurDir.xy + uBlurDir.zw) * uDelta);
     col = col + texture2D(uSrc, texCoord - (uBlurDir.xy + uBlurDir.zw) * uDelta);
-    gl_FragColor = col / 7.5;
+    gl_FragColor = col / 5.0;
 }
+
 </script>
 <!-- effect fragment shader template -->
 <script id="fx_common_fsh" type="x-shader/x_fragment">
@@ -268,6 +283,7 @@ varying vec2 screenCoord;
 void main(void) {
     gl_FragColor = texture2D(uSrc, texCoord);
 }
+
 </script>
 <!-- post processing -->
 <script id="pp_final_vsh" type="x-shader/x_vertex">
@@ -280,6 +296,7 @@ void main(void) {
     texCoord = aPosition.xy * 0.5 + vec2(0.5, 0.5);
     screenCoord = aPosition.xy * vec2(uResolution.z, 1.0);
 }
+
 </script>
 <script id="pp_final_fsh" type="x-shader/x_fragment">
 #ifdef GL_ES
@@ -302,15 +319,12 @@ void main(void) {
     gl_FragColor = vec4(col.rgb, 1.0);
     gl_FragColor.a = 1.0;
 }
-</script>
-<script type="text/javascript">
-    window.addEventListener('load', init);
 
-    //set window.requestAnimationFrame
-    (function (w, r) {
-        w['r' + r] = w['r' + r] || w['webkitR' + r] || w['mozR' + r] || w['msR' + r] || w['oR' + r] || function (c) {
-            w.setTimeout(c, 1000 / 60);
-        };
-    })(window, 'requestAnimationFrame');
 </script>
 </html>
+
+
+
+
+
+

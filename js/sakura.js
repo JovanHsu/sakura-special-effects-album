@@ -635,7 +635,7 @@ function initPostProcess() {
 }
 
 function renderPostProcess() {
-    gl.enable(gl.TEXTURE_2D);
+    // gl.enable(gl.TEXTURE_2D);
     gl.disable(gl.DEPTH_TEST);
     var bindRT = function (rt, isclear) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, rt.frameBuffer);
@@ -816,7 +816,7 @@ let imgEle = document.getElementsByTagName("img");
             let picNum = Math.floor(Math.random() * 29)
             picNum = picNum === 0 ? picNum + 1 : picNum
             let ele = imgEle[Math.floor(Math.random() * imgEle.length)];
-            ele.src = `../img/${picNum}.png`
+            ele.src = `img/${picNum}.png`
         }
     }, 2000)
 })();

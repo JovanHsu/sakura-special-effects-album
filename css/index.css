@@ -1,171 +1,173 @@
 
-
-html{
-    background: #000;
-    height: 200%;
-}
-* {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-a, img {
-    border: 0;
-}
-
-/*body {*/
-/*    font: 12px/180% Arial, Helvetica, sans-serif, "新宋体";*/
-/*}*/
-
 body {
-    display: block;
-    padding: 0;
+    font-family: "Microsoft YaHei", serif;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+body, dl, dd, p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
+}
+
+ol, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    border: none;
+}
+
+body, html {
     overflow: hidden;
-
-    /*background-image: url(http://shp.qpic.cn/ishow/27310020717/1517994115_84828260_20060_sProdImgNo_7.jpg/0);*/
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    width: 100%;
+    height: 100%;
 }
 
-canvas {
-    padding: 0;
-    margin: 0;
-    opacity: 0.8;
-}
-
-div.btnbg {
-    position: fixed;
-    left: 0;
+#background {
+    background-image: url("../img/background.jpeg");
+    position: absolute;
     top: 0;
-}
-
-/*最外层容器样式*/
-.wrap {
-    /*position: relative;*/
-    position: absolute;
-    /*top: 0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
-    /*left: 0;*/
-    width: 400px;
-    height: 400px;
-    margin: auto;
-    /*改变左右上下,图片方块移动*/
-}
-/*包裹所有容器样式*/
-.cube {
-    width: 400px;
-    height: 400px;
-    margin: 0 auto;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.75;
     transform-style: preserve-3d;
-    transform: rotateX(-30deg) rotateY(-80deg);
-    -webkit-animation: rotate 40s infinite;
-    /*匀速*/
-    animation-timing-function: linear;
+    transform: rotateY(180deg);
 }
-@-webkit-keyframes rotate{
-    from{transform: rotateX(0deg) rotateY(0deg);}
-    to{transform: rotateX(360deg) rotateY(360deg);}
-}
-.cube div {
+
+/*main*/
+#main {
     position: absolute;
-    width: 400px;
-    height: 400px;
-    opacity: 0.9;
-    transition: all .4s;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    perspective: 800px;
 }
 
-/*定义所有图片样式*/
-.pic {
-    width: 400px;
-    height: 400px;
-}
-
-.cake {
-    width: 600px;
-    height: 600px;
+.show {
     position: absolute;
-    bottom: 50px;
-    left: 50px;
-    z-index: -99;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
 }
 
-.cake img {
-    width: 600px;
-    height: 600px;
-}
-
-.cube .out_front {
-    transform: rotateY(0deg) translateZ(200px);
-}
-
-.cube .out_back {
-    transform: rotateY(180deg) translateZ(-200px);
-}
-
-.cube .out_left {
-    transform: rotateY(90deg) translateZ(200px);
-}
-
-.cube .out_right {
-    transform: rotateY(-90deg) translateZ(200px);
-}
-.cube .out_top {
-    transform: rotateX(90deg) translateZ(200px);
-}
-.cube .out_bottom {
-    transform: rotateX(-90deg) translateZ(200px);
-}
-/*定义小正方体样式*/
-.cube span {
-    display: block;
-    width: 200px;
-    height: 200px;
+.show .mask {
+    width: 100%;
+    height: 100%;
     position: absolute;
-    top: 100px;
-    left: 100px;
+    top: 0;
+    background-color: #ffffff;
+    opacity: 0.65;
+    z-index: 1000;
 }
-.cube .in_pic {
-    width: 200px;
-    height: 200px;
+
+.show img {
+    /*width: 200px;*/
+    /*height: 300px;*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    border-radius: 50px;
+    box-shadow: 1px 1px 3px #333333;
 }
-.cube .in_front {
-    transform: rotateY(0deg) translateZ(100px);
+
+
+#main ul.list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+
+    width: 180px;
+    height: 240px;
+    /*border: 1px solid red;*/
+
+    transform: translateZ(-2450px) rotateX(0deg) rotateY(0deg);
+    transform-style: preserve-3d;
 }
-.cube .in_back {
-    transform: rotateY(180deg) translateZ(-100px);
+
+#main ul.list li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 127, 127, 0.5);
+    /*border: 1px solid rgba(127,255,255,0.25);*/
+    box-shadow: 0 0 12px rgba(255, 192, 202, 0.3);
+    text-align: center;
+    color: #fff;
+    cursor: default;
+
+    transform-style: preserve-3d;
+    border-radius: 20px;
+
+    transition: transform 3s cubic-bezier(1, .01, .45, 1);
 }
-.cube .in_left {
-    transform: rotateY(90deg) translateZ(100px);
+
+#main ul.list li:hover {
 }
-.cube .in_right {
-    transform: rotateY(-90deg) translateZ(100px);
+
+#main ul.list li img {
+    width: 100%;
+    height: 100%;
+    /*border: 1px solid rgba(255,198,202,.75);*/
+    border-radius: 20px;
 }
-.cube .in_top {
-    transform: rotateX(90deg) translateZ(100px);
+
+#main ul.list li .alpha {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    border-radius: 20px;
+    opacity: 0.1;
+    background-color: white;
 }
-.cube .in_bottom {
-    transform: rotateX(-90deg) translateZ(100px);
+
+#btn {
+    position: absolute;
+    z-index: 999;
+    left: 20px;
+    bottom: 20px;
+    width: 300px;
+    height: 32px;
 }
-/*鼠标移入后样式*/
-.cube:hover .out_front {
-    transform: rotateY(0deg) translateZ(400px);
+
+#btn ul li {
+    float: left;
+    margin: 0 5px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid rgba(127, 255, 255, 1);
+    color: rgba(127, 255, 255, 1);
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
 }
-.cube:hover .out_back {
-    transform: translateZ(-400px) rotateY(180deg);
+
+#btn ul li:hover {
+    background: rgba(0, 127, 127, 0.8);
 }
-.cube:hover .out_left {
-    transform: rotateY(90deg) translateZ(400px);
-}
-.cube:hover .out_right {
-    transform: rotateY(-90deg) translateZ(400px);
-}
-.cube:hover .out_top {
-    transform: rotateX(90deg) translateZ(400px);
-}
-.cube:hover .out_bottom {
-    transform: rotateX(-90deg) translateZ(400px);
-}
+
+
+
+
+
+
+
+
+
+
