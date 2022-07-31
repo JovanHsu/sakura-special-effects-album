@@ -14,11 +14,12 @@
             let ranY = Math.floor(Math.random() * 6000 - 3000);
             let ranZ = Math.floor(Math.random() * 10000 - 5000);
 
+            let picNum = i % 29
+            picNum = picNum === 0 ? picNum + 1 : picNum
             //创建li标签
             html += `<li style="transform: translate3D(${ranX}px,${ranY}px,${ranZ}px)">
-                <p class="title">Css3</p>
-                <p class="author">阿飞</p>
-                <p class="time">2019-07-01</p>
+                <img src = "../img/${picNum}.png" alt="" style="filter: alpha(opacity=50)"/>
+                <div class="alpha"></div>
             </li>`;
         }
         oUl.innerHTML = html;
@@ -27,7 +28,7 @@
         oUl.offsetLeft;
 
         //将布局变为Grid布局
-        oUl.className = "list Grid";
+        oUl.className = "list Helix";
     })();
 
     //效果css提前载入
@@ -35,115 +36,21 @@
         let css = "";
         let oCss = document.getElementById("css");
         let aLi = oUl.children;
-
-        //辅助函数
-        function getLayer(i, arr) {
-            let sum = 0;
-            let result = {};
-            for (let j = 0; j < arr.length; j++) {
-                sum += arr[j];
-                if (sum > i) {
-                    result.ceng = j;
-                    result.ge = arr[j] - (sum - i);
-                    return result;
-                }
-            }
-        }
-
         //遍历计算样式
         [...aLi].forEach((ele, i) => {
-            //Grid的css样式提前加入
-            (function ({jX, jY, jZ, midX, midY, midZ}) {
-                let x = i % 25 % 5;
-                let y = Math.floor(i % 25 / 5);
-                let z = Math.floor(i / 25);
-                
-                let trX = (x - midX) * jX;
-                let trY = (y - midY) * jY;
-                let trZ = (midZ - z) * jZ;
-
-                css += `#main ul.list.Grid li:nth-child(${i + 1}){transform:translate3D(${trX}px,${trY}px,${trZ}px) !important;}`;
-
-            })({
-                jX: 360,
-                jY: 300,
-                jZ: 1000,
-                midX: 2,
-                midY: 2,
-                midZ: 2
-            });
-
             //Helix的css样式提前加入
             (function () {
                 let rad = 4;
                 let trX = 0;
-                let trY = (i - num / 2) * 2 * rad;
-                let trZ = 1000;
+                let trY = (i - num / 2) * 4 * rad;
+                let trZ = 1500;
                 let roY = i * (rad * 360) / num;
                 css += `#main ul.list.Helix li:nth-child(${i + 1}){transform:rotateY(${roY}deg) translate3D(${trX}px,${trY}px,${trZ}px) !important;}`;
             })();
-
-            //Sphere的css样式提前加入
-            (function (arr) {
-                let len = arr.length;
-
-                //求出当前li是属于第 几 层
-                let {ceng, ge} = getLayer(i, arr);
-
-                //求出x的旋转角度
-                let roX = -ceng * 180 / (len - 1) + 90;
-                let roY = 360 / arr[ceng] * ge + ceng * 10;
-                let trZ = 800;
-                css += `#main ul.list.Sphere li:nth-child(${i + 1}){transform:rotateY(${roY}deg) rotateX(${roX}deg) translateZ(${trZ}px) !important;}`;
-
-            })([1, 3, 7, 9, 11, 14, 21, 16, 12, 10, 9, 7, 4, 1]);
-
-            //Table的css样式提前加入
-            (function ({jX, jY, midY, midX, coordinate}) {
-
-                let x = i < 18 ? coordinate[i].x : i % 18;
-                let y = i < 18 ? coordinate[i].y : Math.floor(i / 18) + 2;
-
-                let trX = (x - midX) * jX;
-                let trY = (y - midY) * jY;
-
-                css += `#main ul.list.Table li:nth-child(${i + 1}){transform:translate3D(${trX}px,${trY}px,0px) !important;}`;
-
-            })({
-                //水平垂直间距
-                jX: 170,
-                jY: 210,
-                //求中心点
-                midY: Math.ceil(num / 18) / 2 + 2 - 1.5,
-                midX: 18 / 2 - 0.5,
-                //定义前三行不规则布局的坐标
-                coordinate: [
-                    {x: 0, y: 0}
-                    , {x: 17, y: 0}
-                    , {x: 0, y: 1}
-                    , {x: 1, y: 1}
-                    , {x: 12, y: 1}
-                    , {x: 13, y: 1}
-                    , {x: 14, y: 1}
-                    , {x: 15, y: 1}
-                    , {x: 16, y: 1}
-                    , {x: 17, y: 1}
-                    , {x: 0, y: 2}
-                    , {x: 1, y: 2}
-                    , {x: 12, y: 2}
-                    , {x: 13, y: 2}
-                    , {x: 14, y: 2}
-                    , {x: 15, y: 2}
-                    , {x: 16, y: 2}
-                    , {x: 17, y: 2}
-                ]
-            });
         });
         //赋值
         oCss.innerHTML = css;
     })();
-
-    //拖拽与滚轮
     (function () {
         let lastX
             , lastY
@@ -219,7 +126,6 @@
             }();
 
         };
-
         //添加滚轮事件
         mousewheel(document, function (e, d) {
 
@@ -241,187 +147,5 @@
             }*/
 
         });
-
-    })();
-
-    //左下按钮点击事件
-    (function () {
-        let aBtn = document.querySelectorAll("#btn li");
-        let fnArr = ["Table", "Sphere", "Helix", "Grid"];
-        aBtn.forEach((ele, i) => {
-            ele.onclick = function () {
-                oUl.className = "list " + fnArr[i];
-            };
-        });
     })();
 })();
-
-
-/*//测试代码
-let div = document.createElement("div");
-div.style.cssText = "position:fixed;top:"+e.clientY+"px;left:"+e.clientX+"px;width:2px;height:2px;background:red;";
-document.body.appendChild(div);*/
-
-
-/*
-//得到样式最终的值
-//trZ += d*150;
-let target = d*150;
-let n = 0;
-
-//缓动
-(function m(){
-    //每次变换1/10
-    trZ += target*0.5;
-
-    //设置css
-    oUl.style.transform = `translateZ(${trZ}px) rotateX(${roX}deg) rotateY(${roY}deg)`;
-
-    //极限判断
-    trZ = Math.min(trZ,2200);
-    trZ = Math.max(trZ,-10000);
-
-    if ( ++n>20 )return;
-    requestAnimationFrame(m);
-})();
- */
-
-
-//效果集合
-/*let Fly = {
-    //Grid 层叠布局
-    Grid(){
-        if ( Fly.Grid.ifExe )return;
-
-        let jX = 360;
-        let jY = 300;
-        let jZ = 1000;
-
-        let midX = 2;
-        let midY = 2;
-        let midZ = 2;
-
-
-        let css = "";
-        [...aLi].forEach((ele,i)=>{
-            let x = i%25%5;
-            let y = Math.floor(i%25/5);
-            let z = Math.floor(i/25);
-
-            let trX = (x-midX)*jX;
-            let trY = (y-midY)*jY;
-            let trZ = (midZ-z)*jZ;
-
-            css += `#main ul.list.Grid li:nth-child(${i+1}){transform:translate3D(${trX}px,${trY}px,${trZ}px) !important;}`;
-
-            //ele.style.transform = `translate3D(${trX}px,${trY}px,${trZ}px)`;
-        });
-        oCss.innerHTML += css;
-
-        Fly.Grid.ifExe = true;
-    }
-    //Helix 螺旋布局
-    ,Helix(){
-        if ( Fly.Helix.ifExe )return;
-
-        let rad = 4;
-        let css = "";
-        [...aLi].forEach((ele,i)=>{
-
-            let trX = 0;
-            let trY = (i-num/2)*2*rad;//7*i - 7*(num/2)    // 7*i - 437
-            let trZ = 1000;
-
-            let roY = i*(rad*360)/num;
-
-            css += `#main ul.list.Helix li:nth-child(${i+1}){transform:rotateY(${roY}deg) translate3D(${trX}px,${trY}px,${trZ}px) !important;}`;
-
-            //ele.style.transform = `rotateY(${roY}deg) translate3D(${trX}px,${trY}px,${trZ}px)`;
-        });
-
-        oCss.innerHTML += css;
-        Fly.Helix.ifExe = true;
-    }
-    //Table 元素周期表布局
-    ,Table(){
-        if ( Fly.Table.ifExe )return;
-        //水平垂直间距
-        let jX = 170;
-        let jY = 210;
-
-        //求中心点
-        let midY = Math.ceil(num/18) / 2+2-1.5;
-        let midX = 18 / 2 -0.5;
-
-        //定义前三行不规则布局的坐标
-        let coordinate = [
-            {x:0,y:0}
-            ,{x:17,y:0}
-            ,{x:0,y:1}
-            ,{x:1,y:1}
-            ,{x:12,y:1}
-            ,{x:13,y:1}
-            ,{x:14,y:1}
-            ,{x:15,y:1}
-            ,{x:16,y:1}
-            ,{x:17,y:1}
-            ,{x:0,y:2}
-            ,{x:1,y:2}
-            ,{x:12,y:2}
-            ,{x:13,y:2}
-            ,{x:14,y:2}
-            ,{x:15,y:2}
-            ,{x:16,y:2}
-            ,{x:17,y:2}
-        ];
-
-        let css = "";
-        [...aLi].forEach((ele,i)=>{
-
-            let x = i<18?coordinate[i].x:i%18;
-            let y = i<18?coordinate[i].y:Math.floor(i/18)+2;
-
-            let trX = (x-midX)*jX;
-            let trY = (y-midY)*jY;
-
-            css += `#main ul.list.Table li:nth-child(${i+1}){transform:translate3D(${trX}px,${trY}px,0px) !important;}`;
-            
-            ele.style.transform = `translate3D(${trX}px,${trY}px,0px)`;
-        });
-        oCss.innerHTML += css;
-        Fly.Table.ifExe = true;
-    }
-    //Sphere 球体布局
-    ,Sphere(){
-        if ( Fly.Sphere.ifExe )return;
-        
-        let arr = [1,3,7,9,11,14,21,16,12,10,9,7,4,1];
-        let len = arr.length;
-
-        let css = "";
-        [...aLi].forEach((ele,i)=>{
-
-            //求出当前li是属于第 几 层
-            let {ceng,ge} = getLayer(i,arr);
-
-            // console.log(`当前序号${i}，是第${ceng}层，第${ge}个`);
-
-            //求出x的旋转角度
-            let roX = -ceng*180/(len-1)+90;
-            let roY = 360/arr[ceng]*ge + ceng*10;
-            let trZ = 800;
-            css += `#main ul.list.Sphere li:nth-child(${i+1}){transform:rotateY(${roY}deg) rotateX(${roX}deg) translateZ(${trZ}px) !important;}`;
-
-            //ele.style.transform = `rotateY(${roY}deg) rotateX(${roX}deg) translateZ(${trZ}px)`;
-        });
-        Fly.Sphere.ifExe = true;
-    }
-};*/
-
-
-
-
-
-
-
-

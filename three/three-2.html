@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Three</title>
+    <style>
+        body {
+            margin: 0
+        }
+    </style>
+</head>
+<body>
+<script src="../js/three.js"></script>
+<script>
+    window.onload = function () {
+        let scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45,
+            window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(-30, 40, 30)
+        camera.lookAt(scene.position)
+
+        var webGL1Renderer = new THREE.WebGL1Renderer();
+        webGL1Renderer.setClearColor(new THREE.Color(0xEEEEEE))
+        webGL1Renderer.setSize(window.innerWidth, window.innerHeight)
+
+        // 坐标轴
+        var axesHelper = new THREE.AxesHelper(20);
+        scene.add(axesHelper)
+
+        // 平面
+        var planeGeometry = new THREE.PlaneGeometry(60, 20);
+        var meshBasicMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
+        var plane = new THREE.Mesh(planeGeometry, meshBasicMaterial);
+
+        plane.rotation.x = -0.5 * Math.PI
+        plane.position.set(15, 0, 0)
+
+        scene.add(plane)
+        // 立方体
+        var boxGeometry = new THREE.BoxGeometry(4, 4, 4);
+        var boxMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+        var cube = new THREE.Mesh(boxGeometry, boxMaterial);
+
+        cube.position.set(0, 0, 0)
+
+        scene.add(cube)
+
+
+        // 球体
+        var sphereGeometry
+            = new THREE.SphereGeometry(4, 20, 20);
+        var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: true});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        sphere.position.set(0, 0, 0)
+
+        scene.add(sphere)
+        document.body.appendChild(webGL1Renderer.domElement)
+        webGL1Renderer.render(scene, camera)
+    }
+</script>
+</body>
+</html>
