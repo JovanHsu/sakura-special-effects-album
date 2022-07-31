@@ -812,12 +812,15 @@ window.addEventListener('load', function (e) {
 let imgEle = document.getElementsByTagName("img");
 (function () {
     setInterval(function () {
-        for (let i = 0; i < 4; i++) {
-            let picNum = Math.floor(Math.random() * 29)
-            picNum = picNum === 0 ? picNum + 1 : picNum
-            let ele = imgEle[Math.floor(Math.random() * imgEle.length)];
-            ele.src = `img/${picNum}.png`
-        }
+        [...imgEle].forEach((item, i) => {
+            let src = item.src;
+            let filename = src.substring(src.lastIndexOf("/") + 1);
+            filename = filename.replace(".png", "")
+            console.log(filename)
+            let filenameNum = (parseInt(filename) + 1) % 29
+            filenameNum = filenameNum === 0 ? filenameNum + 1 : filenameNum
+            item.src = `img/${filenameNum}.png`
+        })
     }, 2000)
 })();
 
